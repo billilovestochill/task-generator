@@ -64,6 +64,22 @@ Preview the production build:
 npm run preview
 ```
 
+## Netlify Deployment
+
+Use these settings when connecting the GitHub repo to Netlify:
+
+- Base directory: `.`
+- Package directory: leave empty
+- Build command: `npm run build`
+- Publish directory: `dist`
+- Functions directory: `netlify/functions`
+
+Add this environment variable in Netlify:
+
+```bash
+GROQ_API_KEY=your_groq_api_key_here
+```
+
 ## How It Works
 
 The frontend sends task-generation and status-generation requests to local Vite middleware:
@@ -71,4 +87,6 @@ The frontend sends task-generation and status-generation requests to local Vite 
 - `POST /api/generate` creates implementation tasks from requirement text.
 - `POST /api/status` creates progress updates and Zoho timesheet logs.
 
-The middleware calls Groq using the `openai/gpt-oss-120b` model and returns plain text that the UI formats into copyable fields.
+In local development, Vite middleware handles those API routes. On Netlify, redirects in `netlify.toml` route the same API paths to Netlify Functions.
+
+Both environments call Groq using the `openai/gpt-oss-120b` model and return plain text that the UI formats into copyable fields.
